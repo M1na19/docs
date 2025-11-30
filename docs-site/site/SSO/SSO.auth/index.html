@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://m1na19.github.io/my-docs/my-docs-site/site/SSO/SSO.auth/">
+        <link rel="canonical" href="https://m1na19.github.io/docs/docs-site/site/SSO/SSO.auth/">
       
       
         <link rel="prev" href="../..">
@@ -1305,6 +1305,7 @@
 <li><code>IdP</code> - stands for Identity Provider, it is the server that handles authentication (e.g. Google SSO, LSAC SSO etc. )</li>
 <li><code>Client</code> - refering to the SSO Client, the application that uses the authentication provided by the <code>IdP</code></li>
 <li><code>User</code>/<code>End-User</code> - you</li>
+<li><code>SPA</code> - Single Page Application, a web app that loads a single web document and updates the body using javascript (ex: React, Angular, Vue)</li>
 </ul>
 <h3 id="how-jwt-tokens-work">How JWT Tokens Work</h3>
 <p>If you are already familiar with <strong>JWTs</strong>, you can skip this section.</p>
@@ -1348,15 +1349,11 @@ Hash(secret, header + '.' + payload) === signature
 </blockquote>
 <h3 id="the-purpose-of-access-refresh-and-id-tokens">The Purpose of Access, Refresh, and ID Tokens</h3>
 <p>Access, Refresh, and ID tokens are all commonly implemented as <strong>JWTs</strong>, but each serves a distinct purpose in the authentication and authorization process:</p>
-<ol>
-<li>
-<p><strong>ID Token</strong></p>
-</li>
-<li>
-<p>Contains information about the authenticated user, such as user ID, name, and email.</p>
-</li>
+<p>1. <strong>ID Token</strong></p>
+<ul>
+<li>Contains information about the authenticated user, such as user ID, name, and email.</li>
 <li>Used by the client to identify the end-user and establish a session.</li>
-</ol>
+</ul>
 <p><strong>Example:</strong></p>
 <pre><code class="language-json">{
   &quot;sub&quot;: &quot;1234567890&quot;,
@@ -1366,25 +1363,17 @@ Hash(secret, header + '.' + payload) === signature
   &quot;exp&quot;: 1516242622
 }
 </code></pre>
-<ol>
-<li>
-<p><strong>Access Token</strong></p>
-</li>
-<li>
-<p>Short-lived token used to authorize API requests on behalf of the user.</p>
-</li>
-<li>
-<p>Typically sent in the <code>Authorization</code> header as a bearer token.</p>
-</li>
-<li>
-<p><strong>Refresh Token</strong></p>
-</li>
-<li>
-<p>Long-lived token used to obtain new access tokens when they expire.</p>
-</li>
+<p>2. <strong>Access Token</strong></p>
+<ul>
+<li>Short-lived token used to authorize API requests on behalf of the user.</li>
+<li>Typically sent in the <code>Authorization</code> header as a bearer token.</li>
+</ul>
+<p>3. <strong>Refresh Token</strong></p>
+<ul>
+<li>Long-lived token used to obtain new access tokens when they expire.</li>
 <li>Can also be used to refresh itself in some flows, depending on the IdP.</li>
 <li>Must be stored securely (server-side or in httpOnly cookies) because it can be used to gain new access tokens indefinitely.</li>
-</ol>
+</ul>
 <h3 id="implicit-authorization-flow">Implicit Authorization Flow</h3>
 <p>The <a href="https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-implicit-flow">Implicit Flow</a> was originally designed for SPAs where a client secret could not be safely stored. It is now considered <strong>deprecated and insecure</strong>.</p>
 <p align="center">
@@ -1396,7 +1385,7 @@ Hash(secret, header + '.' + payload) === signature
 <li>User initiates sign in, makes a request to the client - ex: <code>https://example.ro/signIn</code></li>
 <li>Client redirects user to the Identity Provider (IdP) - ex: <code>https://sso.ro/signIn</code></li>
 <li>User logs in with credentials.</li>
-<li>After successful authentication, the IdP redirects the user back to the client with <strong>access</strong> and <strong>ID</strong> tokens directly in the redirect (usually in the URL fragment) - ex: <code>https://example.ro?accessToken=...&amp;idToken=...</code></li>
+<li>After successful authentication, the IdP redirects the user back to the client with <strong>access</strong> and <strong>ID</strong> tokens directly in the redirect (usually in the URL) - ex: <code>https://example.ro?accessToken=...&amp;idToken=...</code></li>
 </ol>
 <h4 id="problems">Problems</h4>
 <ul>
@@ -1416,7 +1405,7 @@ Hash(secret, header + '.' + payload) === signature
 <li>Client redirects user to the Identity Provider (IdP) - ex: <code>https://sso.ro/signIn</code></li>
 <li>User logs in with credentials.</li>
 <li>The IdP redirects user back to Client with an <strong>authorization code</strong> - ex: <code>https://example.ro?authCode=...&amp;iss=...</code></li>
-<li>The Client can then exchange the code for tokens (<code>access token</code>, <code>id token</code>, sometimes <code>refresh token</code>). The IdP provides a route - ex: <code>https://sso.ro/tokens</code>.</li>
+<li>The Client can then exchange the code for tokens (<code>access token</code>, <code>id token</code>, sometimes <code>refresh token</code>). The IdP provides a route for this purpose - ex: <code>https://sso.ro/tokens</code>.</li>
 </ol>
 <pre><code class="language-json">body: {
   &quot;code&quot;: AUTH_CODE, // from IdP callback
@@ -1438,15 +1427,15 @@ Hash(secret, header + '.' + payload) === signature
 </p>
 
 <h4 id="steps_2">Steps</h4>
-<ol>
-<li>User initiates sign in, makes a request to the client - ex: <code>https://example.ro/signIn</code></li>
+<p>1. User initiates sign in, makes a request to the client - ex: <code>https://example.ro/signIn</code></p>
+<ul>
 <li>The client generates a cryptographically random <strong>code verifier</strong> - random string.</li>
 <li>The client derives a <strong>code challenge</strong> from the verifier (typically a SHA-256 hash). </li>
 <li>The client sends the <strong>code challenge</strong> along with the authorization request.</li>
-<li>Client redirects user to the Identity Provider (IdP) with code challange - ex: <code>https://sso.ro/signIn?code_challange=....</code></li>
-<li>After successful authentication, the IdP redirects the user back with the <strong>authorization code</strong> - ex: <code>https://example.ro?authCode=...&amp;iss=...</code></li>
-<li>The client exchanges the authorization code <strong>together with the original code verifier</strong> - ex: <code>https://https://sso.ro/token</code></li>
-</ol>
+</ul>
+<p>2. Client redirects user to the Identity Provider (IdP) with code challange - ex: <code>https://sso.ro/signIn?code_challange=....</code></p>
+<p>3. After successful authentication, the IdP redirects the user back with the <strong>authorization code</strong> - ex: <code>https://example.ro?authCode=...&amp;iss=...</code></p>
+<p>4. The client exchanges the authorization code <strong>together with the original code verifier</strong> - ex: <code>https://https://sso.ro/token</code></p>
 <pre><code class="language-json">body:{
   &quot;code&quot;: AUTH_CODE,// auth code from callback
   &quot;code_verifier&quot;: CODE_VERIFIER,
@@ -1454,22 +1443,16 @@ Hash(secret, header + '.' + payload) === signature
   ... // there is other data included such as client secret, redirect uri etc.
 }
 </code></pre>
-<ol>
-<li>The IdP checks that the code verifier corresponds to the previously sent code challenge, and if valid, issues tokens.</li>
-</ol>
+<p>5. The IdP checks that the code verifier corresponds to the previously sent code challenge, and if valid, issues tokens.</p>
 <blockquote>
 <p><strong>Note:</strong> The IdP does <em>not</em> send the code challenge back to the client. The client must remember the verifier locally.</p>
 </blockquote>
 <h2 id="cross-site-scripting-xss">Cross-Site Scripting (XSS)</h2>
 <p>To understand why storing tokens in a Single Page Application (SPA) is discouraged, it’s important to first understand <strong>Cross-Site Scripting (XSS)</strong>. XSS occurs when an attacker injects malicious JavaScript into a website, which then executes in another user’s browser.</p>
 <p>This vulnerability has two key components:</p>
-<ol>
-<li><strong>The server accepts malicious input</strong></li>
-</ol>
+<p>1. <strong>The server accepts malicious input</strong></p>
 <p>This is a broad category: malicious input may include raw HTML, SVG files, or anything that can contain executable JavaScript. The critical factor is that this input can later be accessed or rendered by other users.</p>
-<ol>
-<li><strong>The server returns that malicious input to other users</strong></li>
-</ol>
+<p>2. <strong>The server returns that malicious input to other users</strong></p>
 <p>When the injected content is delivered to another user’s browser and executed, the attack is successful. At that point, the attacker can access user credentials, tokens, session data, or perform arbitrary actions on behalf of the user.</p>
 <h3 id="mitigations">Mitigations</h3>
 <ul>
@@ -1526,17 +1509,17 @@ This identifier maps to server-side session data that the backend controls.</p>
 
 <h3 id="flow">Flow</h3>
 <p>Alongside the standard PKCE authentication flow:</p>
-<ol>
-<li>User initiates sign in, makes a request to the client - ex: <code>https://example.ro/signIn</code></li>
-<li>Before redirecting the user to the IdP, the client creates a <strong>session</strong> and stores the generated <strong>code verifier</strong> inside it.</li>
-<li>The user signs in with credentials on the IdP.</li>
-<li>After the callback, the backend uses:</li>
+<p>1. User initiates sign in, makes a request to the client - ex: <code>https://example.ro/signIn</code></p>
+<p>2. Before redirecting the user to the IdP, the client creates a <strong>session</strong> and stores the generated <strong>code verifier</strong> inside it.</p>
+<p>3. The user signs in with credentials on the IdP.</p>
+<p>4. After the callback, the backend uses:</p>
+<ul>
 <li>the <strong>authorization code</strong> from the redirect, and</li>
 <li>the <strong>code verifier</strong> retrieved from the session to exchange for tokens.</li>
-<li>The client stores relevant user information in the session (derived from its database or from ID token claims, depending on architecture).</li>
-<li>The frontend receives only the session cookie.</li>
-<li>Any interaction between the user and client is done through this session cookie.</li>
-</ol>
+</ul>
+<p>5. The client stores relevant user information in the session (derived from its database or from ID token claims, depending on architecture).</p>
+<p>6. The frontend receives only the session cookie.</p>
+<p>7. Any interaction between the user and client is done through this session cookie.</p>
 <h3 id="sudo-mode">Sudo Mode</h3>
 <p>Many providers (e.g., GitHub, Google, AWS) implement <strong>sudo mode</strong>, a mechanism that enforces authentication freshness for sensitive operations.</p>
 <p><strong>Key Behaviors</strong></p>
@@ -1565,14 +1548,10 @@ This identifier maps to server-side session data that the backend controls.</p>
 <p>This mirrors how SPA authentication used to work: access tokens stored in browser storage had to be manually attached as headers, making them functionally similar to CSRF tokens. That is why traditional SPA token-based workflows generally did not require separate CSRF protection, the token itself served that purpose.</p>
 <h3 id="csrf-tokens">CSRF Tokens</h3>
 <p>This topic can quickly get deep, so here is a concise overview of the two common approaches for implementing CSRF protection:</p>
-<ol>
-<li><strong>Session-based tokens (stateful)</strong></li>
-</ol>
+<p>1. <strong>Session-based tokens (stateful)</strong></p>
 <p>The server stores a CSRF token in the user’s session. For any non-<code>GET</code> request (<code>POST</code>, <code>PUT</code>, <code>DELETE</code>), the frontend must include the token, usually in a header or hidden form field.
 The server validates that the provided token matches the one stored in the session.</p>
-<ol>
-<li><strong>Double-cookie tokens (stateless)</strong></li>
-</ol>
+<p>2. <strong>Double-cookie tokens (stateless)</strong></p>
 <p>This method avoids storing tokens on the server. Instead, the backend issues a CSRF token to the frontend as a cookie. When the user makes an API request, the token is sent twice:</p>
 <ul>
 <li>once automatically by the browser via the cookie</li>
@@ -1581,6 +1560,9 @@ The server validates that the provided token matches the one stored in the sessi
 <p>The server compares the two values. If they match, the request is allowed.</p>
 <blockquote>
 <p><strong>Note:</strong> The token must be <em>signed</em> by the server (HMAC) to ensure it was issued by the backend and not forged by an attacker.</p>
+<p><strong>Important:</strong>
+<code>GET</code> requests should <strong>never</strong> modify server-side state. A CSRF attack allows an attacker to <em>trigger</em> a request from the victim’s browser, but not to <em>read</em> the response (because of same-origin policies).</p>
+<p>Because <code>GET</code> requests are meant to be <strong>safe</strong>, they typically do <strong>not</strong> require CSRF protection—since, under proper API design, they should only <strong>retrieve</strong> data and never cause changes.</p>
 </blockquote>
 <h2 id="tradeoffs">Tradeoffs</h2>
 <p>Adopting backend-managed PKCE authorization increases security but introduces new considerations.</p>
@@ -1600,7 +1582,8 @@ The server validates that the provided token matches the one stored in the sessi
   This is commonly offloaded to distributed stores such as <strong>Redis</strong>, especially in horizontally scaled environments.</li>
 </ul>
 <h3 id="conclusion">Conclusion</h3>
-<p>Implementing secure authorization flows comes with many pitfalls. Strengthening security in one area can inadvertently expose weaknesses elsewhere, and in general, higher security often comes with increased complexity and resource requirements. While no approach is perfect, this document highlights key best practices and trade-offs to consider when designing SSO authorization.</p>
+<p>Implementing secure authorization flows comes with many pitfalls. Strengthening security in one area can inadvertently expose weaknesses elsewhere, and in general, higher security often comes with increased complexity and resource requirements. </p>
+<p>While no approach is perfect, this document highlights key best practices and trade-offs to consider when designing SSO authorization.</p>
 
 
 

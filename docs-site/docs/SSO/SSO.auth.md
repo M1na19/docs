@@ -20,7 +20,7 @@ The goal of this document is not to prescribe a single “correct” authenticat
 * `IdP` - stands for Identity Provider, it is the server that handles authentication (e.g. Google SSO, LSAC SSO etc. )
 * `Client` - refering to the SSO Client, the application that uses the authentication provided by the `IdP`
 * `User`/`End-User` - you
-
+* `SPA` - Single Page Application, a web app that loads a single web document and updates the body using javascript (ex: React, Angular, Vue)
 
 ### How JWT Tokens Work
 
@@ -87,7 +87,7 @@ Hash(secret, header + '.' + payload) === signature
 
 Access, Refresh, and ID tokens are all commonly implemented as **JWTs**, but each serves a distinct purpose in the authentication and authorization process:
 
-1. **ID Token**
+1\. **ID Token**
 
 * Contains information about the authenticated user, such as user ID, name, and email.
 * Used by the client to identify the end-user and establish a session.
@@ -104,16 +104,16 @@ Access, Refresh, and ID tokens are all commonly implemented as **JWTs**, but eac
 }
 ```
 
-1. **Access Token**
+2\. **Access Token**
 
-   * Short-lived token used to authorize API requests on behalf of the user.
-   * Typically sent in the `Authorization` header as a bearer token.
+- Short-lived token used to authorize API requests on behalf of the user.
+- Typically sent in the `Authorization` header as a bearer token.
 
-2. **Refresh Token**
+3\. **Refresh Token**
 
-   * Long-lived token used to obtain new access tokens when they expire.
-   * Can also be used to refresh itself in some flows, depending on the IdP.
-   * Must be stored securely (server-side or in httpOnly cookies) because it can be used to gain new access tokens indefinitely.
+- Long-lived token used to obtain new access tokens when they expire.
+- Can also be used to refresh itself in some flows, depending on the IdP.
+- Must be stored securely (server-side or in httpOnly cookies) because it can be used to gain new access tokens indefinitely.
 
 ### Implicit Authorization Flow
 
@@ -127,7 +127,7 @@ The [Implicit Flow](https://auth0.com/docs/authenticate/login/oidc-conformant-au
 1. User initiates sign in, makes a request to the client - ex: `https://example.ro/signIn`
 2. Client redirects user to the Identity Provider (IdP) - ex: `https://sso.ro/signIn`
 3. User logs in with credentials.
-4. After successful authentication, the IdP redirects the user back to the client with **access** and **ID** tokens directly in the redirect (usually in the URL fragment) - ex: `https://example.ro?accessToken=...&idToken=...`
+4. After successful authentication, the IdP redirects the user back to the client with **access** and **ID** tokens directly in the redirect (usually in the URL) - ex: `https://example.ro?accessToken=...&idToken=...`
 
 #### Problems
 
@@ -150,7 +150,7 @@ The [Authorization Code Flow](https://auth0.com/docs/authenticate/login/oidc-con
 2. Client redirects user to the Identity Provider (IdP) - ex: `https://sso.ro/signIn`
 3. User logs in with credentials.
 4. The IdP redirects user back to Client with an **authorization code** - ex: `https://example.ro?authCode=...&iss=...`
-5. The Client can then exchange the code for tokens (`access token`, `id token`, sometimes `refresh token`). The IdP provides a route - ex: `https://sso.ro/tokens`.
+5. The Client can then exchange the code for tokens (`access token`, `id token`, sometimes `refresh token`). The IdP provides a route for this purpose - ex: `https://sso.ro/tokens`.
 ```json
 body: {
   "code": AUTH_CODE, // from IdP callback
@@ -174,13 +174,18 @@ The [Authorization Code Flow with PKCE](https://auth0.com/docs/get-started/authe
 
 #### Steps
 
-1. User initiates sign in, makes a request to the client - ex: `https://example.ro/signIn`
-  - The client generates a cryptographically random **code verifier** - random string.
-  - The client derives a **code challenge** from the verifier (typically a SHA-256 hash). 
-  - The client sends the **code challenge** along with the authorization request.
-2. Client redirects user to the Identity Provider (IdP) with code challange - ex: `https://sso.ro/signIn?code_challange=....`
-3. After successful authentication, the IdP redirects the user back with the **authorization code** - ex: `https://example.ro?authCode=...&iss=...`
-4. The client exchanges the authorization code **together with the original code verifier** - ex: `https://https://sso.ro/token`
+1\. User initiates sign in, makes a request to the client - ex: `https://example.ro/signIn`
+
+- The client generates a cryptographically random **code verifier** - random string.
+- The client derives a **code challenge** from the verifier (typically a SHA-256 hash). 
+- The client sends the **code challenge** along with the authorization request.
+
+2\. Client redirects user to the Identity Provider (IdP) with code challange - ex: `https://sso.ro/signIn?code_challange=....`
+
+3\. After successful authentication, the IdP redirects the user back with the **authorization code** - ex: `https://example.ro?authCode=...&iss=...`
+
+4\. The client exchanges the authorization code **together with the original code verifier** - ex: `https://https://sso.ro/token`
+
 ```json
 body:{
   "code": AUTH_CODE,// auth code from callback
@@ -189,7 +194,8 @@ body:{
   ... // there is other data included such as client secret, redirect uri etc.
 }
 ```
-5. The IdP checks that the code verifier corresponds to the previously sent code challenge, and if valid, issues tokens.
+
+5\. The IdP checks that the code verifier corresponds to the previously sent code challenge, and if valid, issues tokens.
 
 > **Note:** The IdP does *not* send the code challenge back to the client. The client must remember the verifier locally.
 
@@ -199,13 +205,13 @@ To understand why storing tokens in a Single Page Application (SPA) is discourag
 
 This vulnerability has two key components:
 
-1. **The server accepts malicious input**
+1\. **The server accepts malicious input**
 
-   This is a broad category: malicious input may include raw HTML, SVG files, or anything that can contain executable JavaScript. The critical factor is that this input can later be accessed or rendered by other users.
+This is a broad category: malicious input may include raw HTML, SVG files, or anything that can contain executable JavaScript. The critical factor is that this input can later be accessed or rendered by other users.
 
-2. **The server returns that malicious input to other users**
+2\. **The server returns that malicious input to other users**
 
-   When the injected content is delivered to another user’s browser and executed, the attack is successful. At that point, the attacker can access user credentials, tokens, session data, or perform arbitrary actions on behalf of the user.
+When the injected content is delivered to another user’s browser and executed, the attack is successful. At that point, the attacker can access user credentials, tokens, session data, or perform arbitrary actions on behalf of the user.
 
 ### Mitigations
 
@@ -279,15 +285,22 @@ This identifier maps to server-side session data that the backend controls.
 
 Alongside the standard PKCE authentication flow:
 
-1. User initiates sign in, makes a request to the client - ex: `https://example.ro/signIn`
-2. Before redirecting the user to the IdP, the client creates a **session** and stores the generated **code verifier** inside it.
-3. The user signs in with credentials on the IdP.
-4. After the callback, the backend uses:
-   * the **authorization code** from the redirect, and
-   * the **code verifier** retrieved from the session to exchange for tokens.
-5. The client stores relevant user information in the session (derived from its database or from ID token claims, depending on architecture).
-6. The frontend receives only the session cookie.
-7. Any interaction between the user and client is done through this session cookie.
+1\. User initiates sign in, makes a request to the client - ex: `https://example.ro/signIn`
+
+2\. Before redirecting the user to the IdP, the client creates a **session** and stores the generated **code verifier** inside it.
+
+3\. The user signs in with credentials on the IdP.
+
+4\. After the callback, the backend uses:
+
+* the **authorization code** from the redirect, and
+* the **code verifier** retrieved from the session to exchange for tokens.
+
+5\. The client stores relevant user information in the session (derived from its database or from ID token claims, depending on architecture).
+
+6\. The frontend receives only the session cookie.
+
+7\. Any interaction between the user and client is done through this session cookie.
 
 ### Sudo Mode
 
@@ -330,12 +343,12 @@ This mirrors how SPA authentication used to work: access tokens stored in browse
 
 This topic can quickly get deep, so here is a concise overview of the two common approaches for implementing CSRF protection:
 
-1. **Session-based tokens (stateful)**
+1\. **Session-based tokens (stateful)**
 
 The server stores a CSRF token in the user’s session. For any non-`GET` request (`POST`, `PUT`, `DELETE`), the frontend must include the token, usually in a header or hidden form field.
 The server validates that the provided token matches the one stored in the session.
 
-2. **Double-cookie tokens (stateless)**
+2\. **Double-cookie tokens (stateless)**
 
 This method avoids storing tokens on the server. Instead, the backend issues a CSRF token to the frontend as a cookie. When the user makes an API request, the token is sent twice:
 
@@ -345,6 +358,13 @@ This method avoids storing tokens on the server. Instead, the backend issues a C
 The server compares the two values. If they match, the request is allowed.
 
 > **Note:** The token must be *signed* by the server (HMAC) to ensure it was issued by the backend and not forged by an attacker.
+
+
+
+> **Important:**
+> `GET` requests should **never** modify server-side state. A CSRF attack allows an attacker to *trigger* a request from the victim’s browser, but not to *read* the response (because of same-origin policies).
+>
+> Because `GET` requests are meant to be **safe**, they typically do **not** require CSRF protection—since, under proper API design, they should only **retrieve** data and never cause changes.
 
 ## Tradeoffs
 
@@ -366,4 +386,6 @@ Adopting backend-managed PKCE authorization increases security but introduces ne
 
 ### Conclusion
 
-Implementing secure authorization flows comes with many pitfalls. Strengthening security in one area can inadvertently expose weaknesses elsewhere, and in general, higher security often comes with increased complexity and resource requirements. While no approach is perfect, this document highlights key best practices and trade-offs to consider when designing SSO authorization.
+Implementing secure authorization flows comes with many pitfalls. Strengthening security in one area can inadvertently expose weaknesses elsewhere, and in general, higher security often comes with increased complexity and resource requirements. 
+
+While no approach is perfect, this document highlights key best practices and trade-offs to consider when designing SSO authorization.
