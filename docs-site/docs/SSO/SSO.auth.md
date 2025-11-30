@@ -2,29 +2,28 @@
 
 ## Introduction
 
-This document captures my exploration of authentication flows, common pitfalls, and security best practices related to user authorization.
+This document captures my research on authentication flows, common pitfalls, and security best practices related to user authorization.
 
 ### Purpose
 
 The goal of this document is not to prescribe a single “correct” authentication flow. Instead, it aims to highlight security considerations, potential vulnerabilities, and trade-offs involved in different design patterns.
 
 ### Scope
-
+* Basic concepts for user authorization
 * OpenID Connect (OIDC) authorization flows
 * XSS and CSRF risks and their implications in authorization
 * Design trade-offs and security considerations
 
-## Authorization Flows in OIDC / OpenID Connect
 
-### Notations:
-* `IdP` - stands for Identity Provider, it is the server that handles authentication (e.g. Google SSO, LSAC SSO etc. )
+## Terminology:
+* `IdP` - stands for Identity Provider, meaning the server that handles authentication (e.g. Google SSO, LSAC SSO etc. )
 * `Client` - refering to the SSO Client, the application that uses the authentication provided by the `IdP`
 * `User`/`End-User` - you
 * `SPA` - Single Page Application, a web app that loads a single web document and updates the body using javascript (ex: React, Angular, Vue)
 
+## Basic concepts
+If you are already familiar with **JWT** tokens you can skip this section.
 ### How JWT Tokens Work
-
-If you are already familiar with **JWTs**, you can skip this section.
 
 JWT (JSON Web Token) is a type of token commonly used for authentication and authorization. It not only conveys information but also ensures the integrity of that information through signatures. A JWT is composed of three parts:
 
@@ -40,6 +39,7 @@ The header specifies the cryptographic algorithm used to sign the token and othe
   "typ": "JWT"
 }
 ```
+> **Important:** Except for debugging purposes, a JWT with `"alg": "none"` must **NEVER** be accepted. Although defined in JWT specification, it's **extremely unsecure**.
 
 ### 2. Payload
 
@@ -50,16 +50,19 @@ The payload contains claims—information about the user or session.
 
 ```json
 {
-  "sub": "1234567890",
+  "sub": "1234567890", // user id
   "name": "John Doe",
   "admin": true,
-  "iat": 1516239022
+  "iat": 1516239022 // issued at <timestamp>
 }
 ```
 
 ### 3. Signature
 
-The signature ensures that the token has not been tampered with.
+The signature ensures that the token has not been tampered with, the process of signing requires encrypting the header and payload to attest their authenticity. A signature must respect two rules:
+
+- the signature can be generated **ONLY** by the IdP
+- once generated, the signature must be verifiable by the IdP that issued it and optionally by third parties
 
 In SSO scenarios, **asymmetric signing** is typically used. The Identity Provider (IdP) signs the JWT with its **private key**, and anyone with the **public key** can verify it:
 
@@ -80,6 +83,7 @@ signature = Hash(secret, header + '.' + payload)
 // Verifying a signature
 Hash(secret, header + '.' + payload) === signature
 ```
+> **Note:** JWT tokens generated with symmetric signing cannot be verified by anyone except the IdP
 
 > **Important:** If the secret is compromised, an attacker could generate valid JWTs and impersonate any user. This is why private key management and secure signing practices are critical.
 
@@ -96,11 +100,11 @@ Access, Refresh, and ID tokens are all commonly implemented as **JWTs**, but eac
 
 ```json
 {
-  "sub": "1234567890",
+  "sub": "1234567890", // user id
   "name": "John Doe",
   "email": "john.doe@example.com",
-  "iat": 1516239022,
-  "exp": 1516242622
+  "iat": 1516239022, // issued at
+  "exp": 1516242622 // expiration
 }
 ```
 
@@ -115,9 +119,11 @@ Access, Refresh, and ID tokens are all commonly implemented as **JWTs**, but eac
 - Can also be used to refresh itself in some flows, depending on the IdP.
 - Must be stored securely (server-side or in httpOnly cookies) because it can be used to gain new access tokens indefinitely.
 
+## Authorization Flows in OIDC / OpenID Connect
+
 ### Implicit Authorization Flow
 
-The [Implicit Flow](https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-implicit-flow) was originally designed for SPAs where a client secret could not be safely stored. It is now considered **deprecated and insecure**.
+The [Implicit Flow](https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-implicit-flow) was originally designed for SPAs where a client secret could not be safely stored. It is now considered **deprecated and unsecure**.
 
 <p align="center">
   <img src="../../img/implicit.png" alt="Diagram" width="400">
@@ -166,7 +172,7 @@ body: {
 
 ### [Authorization Code Flow with PKCE](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce)
 
-The [Authorization Code Flow with PKCE](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce) adds protection against code interception. PKCE ensures continuity between the initial redirect and the code-exchange step.
+The [Authorization Code Flow with PKCE](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce) adds protection against code interception. PKCE (Proof Key for Code Exchange) is an algorithm that ensures continuity between the initial redirect and the code-exchange step by leveraging a random string and it's hash.
 
 <p align="center">
   <img src="../../img//code.png" alt="Diagram" width="400">
@@ -184,7 +190,7 @@ The [Authorization Code Flow with PKCE](https://auth0.com/docs/get-started/authe
 
 3\. After successful authentication, the IdP redirects the user back with the **authorization code** - ex: `https://example.ro?authCode=...&iss=...`
 
-4\. The client exchanges the authorization code **together with the original code verifier** - ex: `https://https://sso.ro/token`
+4\. The client exchanges the authorization code **together with the original code verifier** for access and identity tokens - ex: `https://https://sso.ro/token`
 
 ```json
 body:{
@@ -234,7 +240,7 @@ When the injected content is delivered to another user’s browser and executed,
 
   For file uploads—whether stored in S3 or on local disk—restrict the allowed file types and validate the actual file contents (MIME sniffing), not just the extension. Do not permit arbitrary formats such as SVGs or HTML files unless absolutely required.
 
-* **Use Content Security Policy (CSP)**
+* **Use Content Security Policy ([CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP))**
 
   A strong CSP can significantly reduce the impact of XSS by blocking inline scripts and limiting where scripts can load from.
 
@@ -258,20 +264,25 @@ In SPAs, tokens cannot be stored in **httpOnly** cookies—meaning they must be 
 Libraries like [react-oidc-context](https://github.com/authts/react-oidc-context), built on top of [oidc-client-ts](https://github.com/authts/oidc-client-ts), provide OIDC support specifically for **SPA** React applications.
 They use Authorization Code Flow with PKCE but store tokens in `localStorage` or `sessionStorage`, making them inherently vulnerable to token theft if an XSS occurs.
 
-## Backend Auth Code Flow with PKCE
+## Backend Authorization Code Flow with PKCE
+Backend authorization requires shifting the business logic for authentication from the client to the server. This allows credentials to be stored in httpOnly cookies, and ensures that sensitive authorization steps are executed entirely on the backend, hidden from both the browser and the end user.
+To implement this, two server endpoints are usually added:
 
-Using the Authorization Code Flow with PKCE on the **backend** reduces the attack surface significantly. The main remaining question is how tokens should be stored once the backend obtains them.
+- `/auth/login` -> this endpoint generates A PKCE code challange and stores the verifier on the server, then it redirects the user to the IdP with the code challange
+- `/auth/callback` -> this endpoint is meant for IdP redirection, once the end-user signs in, the IdP redirects to this route with the authorization code that is later exchanged for tokens together with the code verifier
 
-## Option 1: Store Access and ID Token on the Frontend as httpOnly Cookies
+Using the Authorization Code Flow with PKCE on the **backend** reduces the attack surface significantly. The main remaining question is how tokens should be stored once the backend obtains them. Here are two options for authorization cookie storage:
+
+## Option 1: Store IdP issued Access and ID Tokens on the Frontend as httpOnly Cookies
 
 Storing tokens in **httpOnly** cookies is technically secure from a browser-accessibility standpoint. However, this pattern is generally avoided due to the principles of:
 
 * **Isolation** – The frontend should not automatically gain access to all user identity and authorization information.
 * **Least Privilege** – The user should only receive the minimum data needed to function.
 
-Instead of placing access/ID/refresh tokens directly in cookies, it is considered best practice to issue a **session identifier**. This allows the backend to control exactly what information is delivered to the frontend and avoids exposing raw tokens to the browser at all.
+Instead of placing access/ID/refresh tokens directly in cookies, it is considered best practice to issue a **session identifier**. This allows the backend to control exactly what information is delivered to the frontend and avoids exposing raw tokens to the browser at all. Moreover, IdP's can be generous with cookie expiration, so issuing a session cookie enables the applications to have more control on cookie expiration and session management.
 
-## Option 2: Session Cookie (Recommended)
+## Option 2: Store IdP issued Access and ID Tokens on the Backend, use Session Cookie for communication with the Frontend (Recommended)
 
 A session cookie is an **httpOnly**, typically **secure**, cookie that stores only a random, opaque identifier.
 This identifier maps to server-side session data that the backend controls.
@@ -296,13 +307,15 @@ Alongside the standard PKCE authentication flow:
 * the **authorization code** from the redirect, and
 * the **code verifier** retrieved from the session to exchange for tokens.
 
-5\. The client stores relevant user information in the session (derived from its database or from ID token claims, depending on architecture).
+5\. The backend stores relevant user information in the session (derived from its database or from ID token claims, depending on architecture).
 
 6\. The frontend receives only the session cookie.
 
-7\. Any interaction between the user and client is done through this session cookie.
+7\. Any interaction between the user and backend is done through this session cookie.
 
-### Sudo Mode
+> **Note:** The Access Token retrieved from the IdP can be stored on the backend and used to perform API requests on behalf of the user.
+
+## [Sudo Mode](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/sudo-mode)
 
 Many providers (e.g., GitHub, Google, AWS) implement **sudo mode**, a mechanism that enforces authentication freshness for sensitive operations.
 
@@ -329,11 +342,13 @@ If the target site uses cookies for authentication, and these cookies are sent a
 
 ### Mitigations
 
-* **Set cookies with `SameSite=Lax` or `SameSite=Strict`**
+#### Set cookies with `SameSite=Lax` or `SameSite=Strict`
 
-  These settings prevent cookies from being sent on cross-site requests. `Lax` blocks most cross-site POST requests, while `Strict` blocks all cross-site navigations.
+These settings prevent cookies from being sent on cross-site requests. `Lax` blocks most cross-site POST requests, while `Strict` blocks all cross-site navigations.
 
-* **Use CSRF tokens**
+This mitigation is often enough for CSRF protection, unless the server must use `SameSite=None` cookies or absolutely needs confirmation that the user intended the request.
+
+#### Use CSRF tokens
 
   CSRF tokens are unpredictable values generated by the server and included in forms or API requests. Since they must be added manually via JavaScript (or injected into the page), the browser cannot include them automatically. This ensures that a cross-site request made by an attacker will be missing the required token.
 
@@ -341,7 +356,7 @@ This mirrors how SPA authentication used to work: access tokens stored in browse
 
 ### CSRF Tokens
 
-This topic can quickly get deep, so here is a concise overview of the two common approaches for implementing CSRF protection:
+This topic can quickly become a rabbit-hole, so here is a concise overview of the two common approaches for implementing CSRF protection:
 
 1\. **Session-based tokens (stateful)**
 
@@ -375,16 +390,16 @@ Adopting backend-managed PKCE authorization increases security but introduces ne
 * Each backend client must manage server-side sessions.
 * Each backend must implement the Authorization Code Flow with PKCE (including code-verifier persistence, code exchange, token handling, refresh logic, etc.).
 * Session lifecycle management (expiration, rotation, revocation) becomes part of the backend.
-* There must be introduced CSRF protections
+* CSRF protection
 ### Resource Usage
 
 * **Compute**:
   The server performs the token exchange and additional authorization logic that would otherwise run in the client.
 * **Storage / Memory**:
   Session data must be persisted for all authenticated users.
-  This is commonly offloaded to distributed stores such as **Redis**, especially in horizontally scaled environments.
+  This is commonly managed through stores such as **Redis**.
 
-### Conclusion
+## Conclusion
 
 Implementing secure authorization flows comes with many pitfalls. Strengthening security in one area can inadvertently expose weaknesses elsewhere, and in general, higher security often comes with increased complexity and resource requirements. 
 

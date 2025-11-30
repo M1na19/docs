@@ -379,27 +379,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#authorization-flows-in-oidc-openid-connect" class="md-nav__link">
+  <a href="#terminology" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Authorization Flows in OIDC / OpenID Connect
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Authorization Flows in OIDC / OpenID Connect">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#notations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Notations:
+        Terminology:
       
     </span>
   </a>
   
 </li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic concepts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic concepts">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#how-jwt-tokens-work" class="md-nav__link">
@@ -455,6 +455,23 @@
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization-flows-in-oidc-openid-connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization Flows in OIDC / OpenID Connect
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authorization Flows in OIDC / OpenID Connect">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#implicit-authorization-flow" class="md-nav__link">
@@ -635,10 +652,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#backend-auth-code-flow-with-pkce" class="md-nav__link">
+  <a href="#backend-authorization-code-flow-with-pkce" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Backend Auth Code Flow with PKCE
+        Backend Authorization Code Flow with PKCE
       
     </span>
   </a>
@@ -646,10 +663,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#option-1-store-access-and-id-token-on-the-frontend-as-httponly-cookies" class="md-nav__link">
+  <a href="#option-1-store-idp-issued-access-and-id-tokens-on-the-frontend-as-httponly-cookies" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Option 1: Store Access and ID Token on the Frontend as httpOnly Cookies
+        Option 1: Store IdP issued Access and ID Tokens on the Frontend as httpOnly Cookies
       
     </span>
   </a>
@@ -657,15 +674,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#option-2-session-cookie-recommended" class="md-nav__link">
+  <a href="#option-2-store-idp-issued-access-and-id-tokens-on-the-backend-use-session-cookie-for-communication-with-the-frontend-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Option 2: Session Cookie (Recommended)
+        Option 2: Store IdP issued Access and ID Tokens on the Backend, use Session Cookie for communication with the Frontend (Recommended)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Option 2: Session Cookie (Recommended)">
+    <nav class="md-nav" aria-label="Option 2: Store IdP issued Access and ID Tokens on the Backend, use Session Cookie for communication with the Frontend (Recommended)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -679,7 +696,12 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#sudo-mode" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -687,11 +709,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -715,6 +732,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Mitigations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-cookies-with-samesitelax-or-samesitestrict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set cookies with SameSite=Lax or SameSite=Strict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-csrf-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use CSRF tokens
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -768,7 +813,12 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#conclusion" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -776,11 +826,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -866,27 +911,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#authorization-flows-in-oidc-openid-connect" class="md-nav__link">
+  <a href="#terminology" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Authorization Flows in OIDC / OpenID Connect
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Authorization Flows in OIDC / OpenID Connect">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#notations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Notations:
+        Terminology:
       
     </span>
   </a>
   
 </li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic concepts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic concepts">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#how-jwt-tokens-work" class="md-nav__link">
@@ -942,6 +987,23 @@
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization-flows-in-oidc-openid-connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization Flows in OIDC / OpenID Connect
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authorization Flows in OIDC / OpenID Connect">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#implicit-authorization-flow" class="md-nav__link">
@@ -1122,10 +1184,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#backend-auth-code-flow-with-pkce" class="md-nav__link">
+  <a href="#backend-authorization-code-flow-with-pkce" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Backend Auth Code Flow with PKCE
+        Backend Authorization Code Flow with PKCE
       
     </span>
   </a>
@@ -1133,10 +1195,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#option-1-store-access-and-id-token-on-the-frontend-as-httponly-cookies" class="md-nav__link">
+  <a href="#option-1-store-idp-issued-access-and-id-tokens-on-the-frontend-as-httponly-cookies" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Option 1: Store Access and ID Token on the Frontend as httpOnly Cookies
+        Option 1: Store IdP issued Access and ID Tokens on the Frontend as httpOnly Cookies
       
     </span>
   </a>
@@ -1144,15 +1206,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#option-2-session-cookie-recommended" class="md-nav__link">
+  <a href="#option-2-store-idp-issued-access-and-id-tokens-on-the-backend-use-session-cookie-for-communication-with-the-frontend-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Option 2: Session Cookie (Recommended)
+        Option 2: Store IdP issued Access and ID Tokens on the Backend, use Session Cookie for communication with the Frontend (Recommended)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Option 2: Session Cookie (Recommended)">
+    <nav class="md-nav" aria-label="Option 2: Store IdP issued Access and ID Tokens on the Backend, use Session Cookie for communication with the Frontend (Recommended)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1166,7 +1228,12 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#sudo-mode" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1174,11 +1241,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1202,6 +1264,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Mitigations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-cookies-with-samesitelax-or-samesitestrict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set cookies with SameSite=Lax or SameSite=Strict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-csrf-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use CSRF tokens
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1255,7 +1345,12 @@
   
 </li>
         
-          <li class="md-nav__item">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#conclusion" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1263,11 +1358,6 @@
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1290,25 +1380,26 @@
 
 <h1 id="openid-connect-authorization-design">OpenID Connect Authorization Design</h1>
 <h2 id="introduction">Introduction</h2>
-<p>This document captures my exploration of authentication flows, common pitfalls, and security best practices related to user authorization.</p>
+<p>This document captures my research on authentication flows, common pitfalls, and security best practices related to user authorization.</p>
 <h3 id="purpose">Purpose</h3>
 <p>The goal of this document is not to prescribe a single “correct” authentication flow. Instead, it aims to highlight security considerations, potential vulnerabilities, and trade-offs involved in different design patterns.</p>
 <h3 id="scope">Scope</h3>
 <ul>
+<li>Basic concepts for user authorization</li>
 <li>OpenID Connect (OIDC) authorization flows</li>
 <li>XSS and CSRF risks and their implications in authorization</li>
 <li>Design trade-offs and security considerations</li>
 </ul>
-<h2 id="authorization-flows-in-oidc-openid-connect">Authorization Flows in OIDC / OpenID Connect</h2>
-<h3 id="notations">Notations:</h3>
+<h2 id="terminology">Terminology:</h2>
 <ul>
-<li><code>IdP</code> - stands for Identity Provider, it is the server that handles authentication (e.g. Google SSO, LSAC SSO etc. )</li>
+<li><code>IdP</code> - stands for Identity Provider, meaning the server that handles authentication (e.g. Google SSO, LSAC SSO etc. )</li>
 <li><code>Client</code> - refering to the SSO Client, the application that uses the authentication provided by the <code>IdP</code></li>
 <li><code>User</code>/<code>End-User</code> - you</li>
 <li><code>SPA</code> - Single Page Application, a web app that loads a single web document and updates the body using javascript (ex: React, Angular, Vue)</li>
 </ul>
+<h2 id="basic-concepts">Basic concepts</h2>
+<p>If you are already familiar with <strong>JWT</strong> tokens you can skip this section.</p>
 <h3 id="how-jwt-tokens-work">How JWT Tokens Work</h3>
-<p>If you are already familiar with <strong>JWTs</strong>, you can skip this section.</p>
 <p>JWT (JSON Web Token) is a type of token commonly used for authentication and authorization. It not only conveys information but also ensures the integrity of that information through signatures. A JWT is composed of three parts:</p>
 <h3 id="1-header">1. Header</h3>
 <p>The header specifies the cryptographic algorithm used to sign the token and other metadata.</p>
@@ -1318,18 +1409,25 @@
   &quot;typ&quot;: &quot;JWT&quot;
 }
 </code></pre>
+<blockquote>
+<p><strong>Important:</strong> Except for debugging purposes, a JWT with <code>"alg": "none"</code> must <strong>NEVER</strong> be accepted. Although defined in JWT specification, it's <strong>extremely insecure</strong>.</p>
+</blockquote>
 <h3 id="2-payload">2. Payload</h3>
 <p>The payload contains claims—information about the user or session.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-json">{
-  &quot;sub&quot;: &quot;1234567890&quot;,
+  &quot;sub&quot;: &quot;1234567890&quot;, // user id
   &quot;name&quot;: &quot;John Doe&quot;,
   &quot;admin&quot;: true,
-  &quot;iat&quot;: 1516239022
+  &quot;iat&quot;: 1516239022 // issued at &lt;timestamp&gt;
 }
 </code></pre>
 <h3 id="3-signature">3. Signature</h3>
-<p>The signature ensures that the token has not been tampered with.</p>
+<p>The signature ensures that the token has not been tampered with, the process of signing requires encrypting the header and payload to attest their authenticity. A signature must respect two rules:</p>
+<ul>
+<li>the signature can be generated <strong>ONLY</strong> by the IdP</li>
+<li>once generated, the signature must be verifiable by the IdP that issued it and optionally by third parties</li>
+</ul>
 <p>In SSO scenarios, <strong>asymmetric signing</strong> is typically used. The Identity Provider (IdP) signs the JWT with its <strong>private key</strong>, and anyone with the <strong>public key</strong> can verify it:</p>
 <pre><code class="language-js">// Creating a signature
 signature = Encrypt(private_key, header + '.' + payload)
@@ -1345,6 +1443,7 @@ signature = Hash(secret, header + '.' + payload)
 Hash(secret, header + '.' + payload) === signature
 </code></pre>
 <blockquote>
+<p><strong>Note:</strong> JWT tokens generated with symmetric signing cannot be verified by anyone except the IdP</p>
 <p><strong>Important:</strong> If the secret is compromised, an attacker could generate valid JWTs and impersonate any user. This is why private key management and secure signing practices are critical.</p>
 </blockquote>
 <h3 id="the-purpose-of-access-refresh-and-id-tokens">The Purpose of Access, Refresh, and ID Tokens</h3>
@@ -1356,11 +1455,11 @@ Hash(secret, header + '.' + payload) === signature
 </ul>
 <p><strong>Example:</strong></p>
 <pre><code class="language-json">{
-  &quot;sub&quot;: &quot;1234567890&quot;,
+  &quot;sub&quot;: &quot;1234567890&quot;, // user id
   &quot;name&quot;: &quot;John Doe&quot;,
   &quot;email&quot;: &quot;john.doe@example.com&quot;,
-  &quot;iat&quot;: 1516239022,
-  &quot;exp&quot;: 1516242622
+  &quot;iat&quot;: 1516239022, // issued at
+  &quot;exp&quot;: 1516242622 // expiration
 }
 </code></pre>
 <p>2. <strong>Access Token</strong></p>
@@ -1374,6 +1473,7 @@ Hash(secret, header + '.' + payload) === signature
 <li>Can also be used to refresh itself in some flows, depending on the IdP.</li>
 <li>Must be stored securely (server-side or in httpOnly cookies) because it can be used to gain new access tokens indefinitely.</li>
 </ul>
+<h2 id="authorization-flows-in-oidc-openid-connect">Authorization Flows in OIDC / OpenID Connect</h2>
 <h3 id="implicit-authorization-flow">Implicit Authorization Flow</h3>
 <p>The <a href="https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-implicit-flow">Implicit Flow</a> was originally designed for SPAs where a client secret could not be safely stored. It is now considered <strong>deprecated and insecure</strong>.</p>
 <p align="center">
@@ -1421,7 +1521,7 @@ Hash(secret, header + '.' + payload) === signature
 <li>Storing tokens directly in a SPA still carries the same exposure risks as the implicit flow.</li>
 </ul>
 <h3 id="authorization-code-flow-with-pkce"><a href="https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce">Authorization Code Flow with PKCE</a></h3>
-<p>The <a href="https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce">Authorization Code Flow with PKCE</a> adds protection against code interception. PKCE ensures continuity between the initial redirect and the code-exchange step.</p>
+<p>The <a href="https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce">Authorization Code Flow with PKCE</a> adds protection against code interception. PKCE (Proof Key for Code Exchange) is an algorithm that ensures continuity between the initial redirect and the code-exchange step by leveraging a random string and it's hash.</p>
 <p align="center">
   <img src="../../img//code.png" alt="Diagram" width="400">
 </p>
@@ -1435,7 +1535,7 @@ Hash(secret, header + '.' + payload) === signature
 </ul>
 <p>2. Client redirects user to the Identity Provider (IdP) with code challange - ex: <code>https://sso.ro/signIn?code_challange=....</code></p>
 <p>3. After successful authentication, the IdP redirects the user back with the <strong>authorization code</strong> - ex: <code>https://example.ro?authCode=...&amp;iss=...</code></p>
-<p>4. The client exchanges the authorization code <strong>together with the original code verifier</strong> - ex: <code>https://https://sso.ro/token</code></p>
+<p>4. The client exchanges the authorization code <strong>together with the original code verifier</strong> for access and identity tokens - ex: <code>https://https://sso.ro/token</code></p>
 <pre><code class="language-json">body:{
   &quot;code&quot;: AUTH_CODE,// auth code from callback
   &quot;code_verifier&quot;: CODE_VERIFIER,
@@ -1473,7 +1573,7 @@ Hash(secret, header + '.' + payload) === signature
 </ul>
 <p>For file uploads—whether stored in S3 or on local disk—restrict the allowed file types and validate the actual file contents (MIME sniffing), not just the extension. Do not permit arbitrary formats such as SVGs or HTML files unless absolutely required.</p>
 <ul>
-<li><strong>Use Content Security Policy (CSP)</strong></li>
+<li><strong>Use Content Security Policy (<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP">CSP</a>)</strong></li>
 </ul>
 <p>A strong CSP can significantly reduce the impact of XSS by blocking inline scripts and limiting where scripts can load from.</p>
 <ul>
@@ -1491,16 +1591,22 @@ In SPAs, tokens cannot be stored in <strong>httpOnly</strong> cookies—meaning 
 <h2 id="react-spa-flow">React SPA Flow</h2>
 <p>Libraries like <a href="https://github.com/authts/react-oidc-context">react-oidc-context</a>, built on top of <a href="https://github.com/authts/oidc-client-ts">oidc-client-ts</a>, provide OIDC support specifically for <strong>SPA</strong> React applications.
 They use Authorization Code Flow with PKCE but store tokens in <code>localStorage</code> or <code>sessionStorage</code>, making them inherently vulnerable to token theft if an XSS occurs.</p>
-<h2 id="backend-auth-code-flow-with-pkce">Backend Auth Code Flow with PKCE</h2>
-<p>Using the Authorization Code Flow with PKCE on the <strong>backend</strong> reduces the attack surface significantly. The main remaining question is how tokens should be stored once the backend obtains them.</p>
-<h2 id="option-1-store-access-and-id-token-on-the-frontend-as-httponly-cookies">Option 1: Store Access and ID Token on the Frontend as httpOnly Cookies</h2>
+<h2 id="backend-authorization-code-flow-with-pkce">Backend Authorization Code Flow with PKCE</h2>
+<p>Backend authorization requires shifting the business logic for authentication from the client to the server. This allows credentials to be stored in httpOnly cookies, and ensures that sensitive authorization steps are executed entirely on the backend, hidden from both the browser and the end user.
+To implement this, two server endpoints are usually added:</p>
+<ul>
+<li><code>/auth/login</code> -&gt; this endpoint generates A PKCE code challange and stores the verifier on the server, then it redirects the user to the IdP with the code challange</li>
+<li><code>/auth/callback</code> -&gt; this endpoint is meant for IdP redirection, once the end-user signs in, the IdP redirects to this route with the authorization code that is later exchanged for tokens together with the code verifier</li>
+</ul>
+<p>Using the Authorization Code Flow with PKCE on the <strong>backend</strong> reduces the attack surface significantly. The main remaining question is how tokens should be stored once the backend obtains them. Here are two options for authorization cookie storage:</p>
+<h2 id="option-1-store-idp-issued-access-and-id-tokens-on-the-frontend-as-httponly-cookies">Option 1: Store IdP issued Access and ID Tokens on the Frontend as httpOnly Cookies</h2>
 <p>Storing tokens in <strong>httpOnly</strong> cookies is technically secure from a browser-accessibility standpoint. However, this pattern is generally avoided due to the principles of:</p>
 <ul>
 <li><strong>Isolation</strong> – The frontend should not automatically gain access to all user identity and authorization information.</li>
 <li><strong>Least Privilege</strong> – The user should only receive the minimum data needed to function.</li>
 </ul>
-<p>Instead of placing access/ID/refresh tokens directly in cookies, it is considered best practice to issue a <strong>session identifier</strong>. This allows the backend to control exactly what information is delivered to the frontend and avoids exposing raw tokens to the browser at all.</p>
-<h2 id="option-2-session-cookie-recommended">Option 2: Session Cookie (Recommended)</h2>
+<p>Instead of placing access/ID/refresh tokens directly in cookies, it is considered best practice to issue a <strong>session identifier</strong>. This allows the backend to control exactly what information is delivered to the frontend and avoids exposing raw tokens to the browser at all. Moreover, IdP's can be generous with cookie expiration, so issuing a session cookie enables the applications to have more control on cookie expiration and session management.</p>
+<h2 id="option-2-store-idp-issued-access-and-id-tokens-on-the-backend-use-session-cookie-for-communication-with-the-frontend-recommended">Option 2: Store IdP issued Access and ID Tokens on the Backend, use Session Cookie for communication with the Frontend (Recommended)</h2>
 <p>A session cookie is an <strong>httpOnly</strong>, typically <strong>secure</strong>, cookie that stores only a random, opaque identifier.
 This identifier maps to server-side session data that the backend controls.</p>
 <p align="center">
@@ -1517,10 +1623,13 @@ This identifier maps to server-side session data that the backend controls.</p>
 <li>the <strong>authorization code</strong> from the redirect, and</li>
 <li>the <strong>code verifier</strong> retrieved from the session to exchange for tokens.</li>
 </ul>
-<p>5. The client stores relevant user information in the session (derived from its database or from ID token claims, depending on architecture).</p>
+<p>5. The backend stores relevant user information in the session (derived from its database or from ID token claims, depending on architecture).</p>
 <p>6. The frontend receives only the session cookie.</p>
-<p>7. Any interaction between the user and client is done through this session cookie.</p>
-<h3 id="sudo-mode">Sudo Mode</h3>
+<p>7. Any interaction between the user and backend is done through this session cookie.</p>
+<blockquote>
+<p><strong>Note:</strong> The Access Token retrieved from the IdP can be stored on the backend and used to perform API requests on behalf of the user.</p>
+</blockquote>
+<h2 id="sudo-mode"><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/sudo-mode">Sudo Mode</a></h2>
 <p>Many providers (e.g., GitHub, Google, AWS) implement <strong>sudo mode</strong>, a mechanism that enforces authentication freshness for sensitive operations.</p>
 <p><strong>Key Behaviors</strong></p>
 <ul>
@@ -1537,17 +1646,14 @@ This identifier maps to server-side session data that the backend controls.</p>
 </code></pre>
 <p>If the target site uses cookies for authentication, and these cookies are sent automatically (<code>SameSite=None</code>), the browser will attach them to the request, even though the user never intended to perform the action.</p>
 <h3 id="mitigations_1">Mitigations</h3>
-<ul>
-<li><strong>Set cookies with <code>SameSite=Lax</code> or <code>SameSite=Strict</code></strong></li>
-</ul>
+<h4 id="set-cookies-with-samesitelax-or-samesitestrict">Set cookies with <code>SameSite=Lax</code> or <code>SameSite=Strict</code></h4>
 <p>These settings prevent cookies from being sent on cross-site requests. <code>Lax</code> blocks most cross-site POST requests, while <code>Strict</code> blocks all cross-site navigations.</p>
-<ul>
-<li><strong>Use CSRF tokens</strong></li>
-</ul>
+<p>This mitigation is often enough for CSRF protection, unless the server must use <code>SameSite=None</code> cookies or absolutely needs confirmation that the user intended the request.</p>
+<h4 id="use-csrf-tokens">Use CSRF tokens</h4>
 <p>CSRF tokens are unpredictable values generated by the server and included in forms or API requests. Since they must be added manually via JavaScript (or injected into the page), the browser cannot include them automatically. This ensures that a cross-site request made by an attacker will be missing the required token.</p>
 <p>This mirrors how SPA authentication used to work: access tokens stored in browser storage had to be manually attached as headers, making them functionally similar to CSRF tokens. That is why traditional SPA token-based workflows generally did not require separate CSRF protection, the token itself served that purpose.</p>
 <h3 id="csrf-tokens">CSRF Tokens</h3>
-<p>This topic can quickly get deep, so here is a concise overview of the two common approaches for implementing CSRF protection:</p>
+<p>This topic can quickly become a rabbit-hole, so here is a concise overview of the two common approaches for implementing CSRF protection:</p>
 <p>1. <strong>Session-based tokens (stateful)</strong></p>
 <p>The server stores a CSRF token in the user’s session. For any non-<code>GET</code> request (<code>POST</code>, <code>PUT</code>, <code>DELETE</code>), the frontend must include the token, usually in a header or hidden form field.
 The server validates that the provided token matches the one stored in the session.</p>
@@ -1571,7 +1677,7 @@ The server validates that the provided token matches the one stored in the sessi
 <li>Each backend client must manage server-side sessions.</li>
 <li>Each backend must implement the Authorization Code Flow with PKCE (including code-verifier persistence, code exchange, token handling, refresh logic, etc.).</li>
 <li>Session lifecycle management (expiration, rotation, revocation) becomes part of the backend.</li>
-<li>There must be introduced CSRF protections</li>
+<li>CSRF protection</li>
 </ul>
 <h3 id="resource-usage">Resource Usage</h3>
 <ul>
@@ -1579,9 +1685,9 @@ The server validates that the provided token matches the one stored in the sessi
   The server performs the token exchange and additional authorization logic that would otherwise run in the client.</li>
 <li><strong>Storage / Memory</strong>:
   Session data must be persisted for all authenticated users.
-  This is commonly offloaded to distributed stores such as <strong>Redis</strong>, especially in horizontally scaled environments.</li>
+  This is commonly managed through stores such as <strong>Redis</strong>.</li>
 </ul>
-<h3 id="conclusion">Conclusion</h3>
+<h2 id="conclusion">Conclusion</h2>
 <p>Implementing secure authorization flows comes with many pitfalls. Strengthening security in one area can inadvertently expose weaknesses elsewhere, and in general, higher security often comes with increased complexity and resource requirements. </p>
 <p>While no approach is perfect, this document highlights key best practices and trade-offs to consider when designing SSO authorization.</p>
 
