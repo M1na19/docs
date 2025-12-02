@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://m1na19.github.io/docs/docs-site/site/SSO/SSO.auth/">
       
       
-        <link rel="prev" href="../..">
+        <link rel="prev" href="../AuthReverseProxy/">
       
       
       
@@ -272,6 +272,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AuthReverseProxy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proposal for Reverse Proxy Authenticator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1410,7 +1438,7 @@
 }
 </code></pre>
 <blockquote>
-<p><strong>Important:</strong> Except for debugging purposes, a JWT with <code>"alg": "none"</code> must <strong>NEVER</strong> be accepted. Although defined in JWT specification, it's <strong>extremely insecure</strong>.</p>
+<p><strong>Important:</strong> Except for debugging purposes, a JWT with <code>"alg": "none"</code> must <strong>NEVER</strong> be accepted. Although defined in JWT specification, it's <strong>extremely unsecure</strong>.</p>
 </blockquote>
 <h3 id="2-payload">2. Payload</h3>
 <p>The payload contains claims—information about the user or session.</p>
@@ -1475,7 +1503,7 @@ Hash(secret, header + '.' + payload) === signature
 </ul>
 <h2 id="authorization-flows-in-oidc-openid-connect">Authorization Flows in OIDC / OpenID Connect</h2>
 <h3 id="implicit-authorization-flow">Implicit Authorization Flow</h3>
-<p>The <a href="https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-implicit-flow">Implicit Flow</a> was originally designed for SPAs where a client secret could not be safely stored. It is now considered <strong>deprecated and insecure</strong>.</p>
+<p>The <a href="https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-implicit-flow">Implicit Flow</a> was originally designed for SPAs where a client secret could not be safely stored. It is now considered <strong>deprecated and unsecure</strong>.</p>
 <p align="center">
   <img src="../../img/implicit.png" alt="Diagram" width="400">
 </p>
