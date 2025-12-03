@@ -1528,52 +1528,70 @@ Hash(secret, header + '.' + payload) === signature
 </p>
 
 <h4 id="steps_1">Steps</h4>
-<ol>
-<li>User initiates sign in, makes a request to the client - ex: <code>https://example.ro/signIn</code></li>
-<li>Client redirects user to the Identity Provider (IdP) - ex: <code>https://sso.ro/signIn</code></li>
-<li>User logs in with credentials.</li>
-<li>The IdP redirects user back to Client with an <strong>authorization code</strong> - ex: <code>https://example.ro?authCode=...&amp;iss=...</code></li>
-<li>The Client can then exchange the code for tokens (<code>access token</code>, <code>id token</code>, sometimes <code>refresh token</code>). The IdP provides a route for this purpose - ex: <code>https://sso.ro/tokens</code>.</li>
-</ol>
+<p>1. User initiates sign-in and makes a request to the client — e.g. <code>https://example.ro/signIn</code></p>
+<ul>
+<li>The client generates a <strong>state</strong> value (random string) to protect against CSRF attacks.</li>
+<li>The client generates a <strong>nonce</strong> value to bind the issued ID token to the request and prevent replay attacks.</li>
+</ul>
+<p>2. Client redirects the user to the Identity Provider (IdP) — e.g. <code>https://sso.ro/signIn?state=STATE&amp;nonce=NONCE</code></p>
+<p>3. User logs in with credentials.</p>
+<p>4. The IdP redirects the user back to the client with an <strong>authorization code</strong> — e.g.
+   <code>https://example.ro?authCode=...&amp;iss=...&amp;state=STATE</code></p>
+<ul>
+<li>The client must verify that the returned <code>state</code> value matches the one it generated.</li>
+</ul>
+<p>5. The client then exchanges the code for tokens (<code>access token</code>, <code>id token</code>, sometimes <code>refresh token</code>).
+   The IdP provides a route for this purpose — e.g. <code>https://sso.ro/tokens</code>.</p>
 <pre><code class="language-json">body: {
   &quot;code&quot;: AUTH_CODE, // from IdP callback
   ...
 }
 </code></pre>
 <blockquote>
-<p>Note: Depending on the type of application these tokens can be used directly or the Client can issue new tokens or sessions</p>
+<p>Note: Depending on the type of application, these tokens can be used directly or the client can issue new tokens or sessions.</p>
 </blockquote>
 <h4 id="problems_1">Problems</h4>
 <ul>
 <li>Without PKCE, the code can be intercepted and misused.</li>
 <li>Storing tokens directly in a SPA still carries the same exposure risks as the implicit flow.</li>
 </ul>
+<hr />
 <h3 id="authorization-code-flow-with-pkce"><a href="https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce">Authorization Code Flow with PKCE</a></h3>
-<p>The <a href="https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce">Authorization Code Flow with PKCE</a> adds protection against code interception. PKCE (Proof Key for Code Exchange) is an algorithm that ensures continuity between the initial redirect and the code-exchange step by leveraging a random string and it's hash.</p>
+<p>The <a href="https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce">Authorization Code Flow with PKCE</a> adds protection against code interception. PKCE (Proof Key for Code Exchange) is an algorithm that ensures continuity between the initial redirect and the code-exchange step by leveraging a random string and its hash.</p>
 <p align="center">
   <img src="../../img//code.png" alt="Diagram" width="400">
 </p>
 
 <h4 id="steps_2">Steps</h4>
-<p>1. User initiates sign in, makes a request to the client - ex: <code>https://example.ro/signIn</code></p>
+<p>1. User initiates sign-in — e.g. <code>https://example.ro/signIn</code></p>
 <ul>
-<li>The client generates a cryptographically random <strong>code verifier</strong> - random string.</li>
-<li>The client derives a <strong>code challenge</strong> from the verifier (typically a SHA-256 hash). </li>
-<li>The client sends the <strong>code challenge</strong> along with the authorization request.</li>
+<li>The client generates a cryptographically random <strong>code verifier</strong> (random string).</li>
+<li>The client derives a <strong>code challenge</strong> from the verifier (typically a SHA-256 hash).</li>
+<li>The client generates a <strong>state</strong> value for CSRF protection.</li>
+<li>The client generates a <strong>nonce</strong> value for ID token replay protection.</li>
+<li>The client sends the <strong>code challenge</strong>, <strong>state</strong>, and <strong>nonce</strong> along with the authorization request.</li>
 </ul>
-<p>2. Client redirects user to the Identity Provider (IdP) with code challange - ex: <code>https://sso.ro/signIn?code_challange=....</code></p>
-<p>3. After successful authentication, the IdP redirects the user back with the <strong>authorization code</strong> - ex: <code>https://example.ro?authCode=...&amp;iss=...</code></p>
-<p>4. The client exchanges the authorization code <strong>together with the original code verifier</strong> for access and identity tokens - ex: <code>https://https://sso.ro/token</code></p>
-<pre><code class="language-json">body:{
-  &quot;code&quot;: AUTH_CODE,// auth code from callback
+<p>2. Client redirects the user to the Identity Provider (IdP) with the code challenge — e.g.
+<code>https://sso.ro/signIn?code_challenge=...&amp;state=STATE&amp;nonce=NONCE</code></p>
+<p>3. After successful authentication, the IdP redirects the user back with the <strong>authorization code</strong> — e.g.
+<code>https://example.ro?authCode=...&amp;iss=...&amp;state=STATE</code></p>
+<ul>
+<li>The client must verify the <code>state</code> value before exchanging the code.</li>
+</ul>
+<p>4. The client exchanges the authorization code <strong>together with the original code verifier</strong> for access and identity tokens — e.g. <code>https://sso.ro/token</code></p>
+<pre><code class="language-json">body: {
+  &quot;code&quot;: AUTH_CODE, // auth code from callback
   &quot;code_verifier&quot;: CODE_VERIFIER,
   &quot;client_id&quot;: CLIENT_ID
-  ... // there is other data included such as client secret, redirect uri etc.
+  ... // other data included such as client secret, redirect URI, etc.
 }
 </code></pre>
 <p>5. The IdP checks that the code verifier corresponds to the previously sent code challenge, and if valid, issues tokens.</p>
+<ul>
+<li>The client checks the <code>nonce</code> inside the ID token to ensure it matches the originally generated nonce.</li>
+</ul>
 <blockquote>
-<p><strong>Note:</strong> The IdP does <em>not</em> send the code challenge back to the client. The client must remember the verifier locally.</p>
+<p><strong>Note:</strong> The IdP does <em>not</em> send the code challenge back to the client. The client must remember the verifier (as well as the state and nonce) locally.</p>
 </blockquote>
 <h2 id="cross-site-scripting-xss">Cross-Site Scripting (XSS)</h2>
 <p>To understand why storing tokens in a Single Page Application (SPA) is discouraged, it’s important to first understand <strong>Cross-Site Scripting (XSS)</strong>. XSS occurs when an attacker injects malicious JavaScript into a website, which then executes in another user’s browser.</p>

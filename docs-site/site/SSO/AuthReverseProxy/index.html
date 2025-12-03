@@ -353,17 +353,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#purpose" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Purpose
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#design" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -491,6 +480,95 @@
     <span class="md-ellipsis">
       
         Compatibility with Traefik
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trade-offs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Trade-offs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benefits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drawbacks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drawbacks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mitigations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mitigations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mitigations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hybrid-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodejs-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.js library
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion
       
     </span>
   </a>
@@ -584,17 +662,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#purpose" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Purpose
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#design" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -733,6 +800,95 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trade-offs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Trade-offs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benefits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drawbacks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Drawbacks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mitigations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mitigations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mitigations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hybrid-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodejs-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node.js library
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -753,14 +909,11 @@
 <h1 id="proposal-for-reverse-proxy-authenticator">Proposal for Reverse Proxy Authenticator</h1>
 <h2 id="overview">Overview</h2>
 <p>This document proposes a centralized solution for <em>user identification and authorization</em> using <strong>Single Sign On</strong> configured with <strong>OpenID PKCE</strong>. The reverse proxy's purpose is to resolve and manage all authentication logic and expose headers to services containing user information.</p>
-<h2 id="purpose">Purpose</h2>
-<p>TODO:
-For now, code simplicity and centralization of authentication and security.</p>
 <h2 id="design">Design</h2>
 <h3 id="modes">Modes</h3>
 <p>The reverse proxy would operate in 2 different modes:</p>
 <h4 id="passive-authorization">Passive Authorization</h4>
-<p>The user is not required to be signed in when accessing resources. The reverse proxy will attach user data to headers if the user is authenticated; otherwise, the request is sent as it is (or optionally with a header like <code>X-UserAuth: false</code>).</p>
+<p>The user is not required to be signed in when accessing resources. The reverse proxy will attach user data to headers if the user is authenticated; otherwise, the request is sent as it is (or optionally with a header like <code>X-User-auth: false</code>).</p>
 <blockquote>
 <p><strong>Note</strong>: Passive mode is targeted for backend services that do not require authorization for every task (auth logic is handled by the service).</p>
 </blockquote>
@@ -773,30 +926,56 @@ For now, code simplicity and centralization of authentication and security.</p>
 <h3 id="configuration">Configuration</h3>
 <p>The protected service will have to set the following data:</p>
 <ul>
-<li><code>Mode</code>: <code>passive</code>/<code>aggressive</code></li>
-<li><code>PostSignInRedirectURL</code> - e.g. <code>https://frontend/</code></li>
-<li><code>IdPSignOut</code>: <code>false</code>/<code>true</code></li>
-</ul>
+<li>
+<p><code>mode</code>: <code>passive</code>/<code>aggressive</code></p>
+</li>
+<li>
+<p><code>sign_in_path</code> - default: <code>/signIn</code></p>
+</li>
+<li>
+<p><code>callback_path</code> - default: <code>/callback</code></p>
+</li>
+<li>
+<p><code>post_sign_in_redirect_url</code> - e.g. <code>https://frontend/</code></p>
 <blockquote>
-<p>This configuration makes the proxy initiate IdP SignOut together with Service SignOut.</p>
+<p>The path the user is redirected to after a successful sign-in</p>
 </blockquote>
-<ul>
-<li><code>PostSignOutRedirectURL</code> - e.g. <code>https://frontend/</code></li>
-<li><code>NotifyUserSession</code>: <code>false</code>/<code>true</code></li>
-</ul>
+</li>
+<li>
+<p><code>idp_sign_out</code>: <code>false</code>/<code>true</code></p>
 <blockquote>
-<p>This configuration makes the proxy call a predefined route with user data after successful sign-in (the purpose is to inform the service that the user exists).</p>
+<p>This configuration makes the proxy initiate IdP sign-out together with the service sign-out. This means the user is also signed out from the IdP, so for the next login attempt to any website using that IdP, they will have to sign in to the IdP again.</p>
 </blockquote>
-<ul>
-<li><code>NotifyUserSessionURL</code> (required if <code>NotifyUserSession</code> is true) - e.g. <code>http://protected-service/api/user</code></li>
-<li><code>AttachAccessToken</code>: <code>false</code>/<code>true</code></li>
-</ul>
+</li>
+<li>
+<p><code>post_sign_out_redirect_url</code> - e.g. <code>https://frontend/</code></p>
+<blockquote>
+<p>The path the user is redirected to after a successful sign-out</p>
+</blockquote>
+</li>
+<li>
+<p><code>notify_user_session</code>: <code>false</code>/<code>true</code></p>
+<blockquote>
+<p>This configuration makes the proxy call a predefined route with user data after a successful sign-in (the purpose is to inform the service that the user exists).</p>
+</blockquote>
+</li>
+<li>
+<p><code>notify_user_session_url</code> (required if <code>notify_user_session</code> is true) - e.g. <code>http://protected-service/api/user</code></p>
+<blockquote>
+<p>The path the proxy will call with user data after a successful sign-in</p>
+</blockquote>
+</li>
+<li>
+<p><code>attach_access_token</code>: <code>false</code>/<code>true</code></p>
 <blockquote>
 <p>This configuration makes the proxy attach the access token before forwarding the request.</p>
 </blockquote>
+</li>
+</ul>
 <h3 id="flow">Flow</h3>
+<p><img src="../../img/proxy.svg"></img></p>
 <h4 id="sign-in">Sign In</h4>
-<p>For sign-in, the proxy will require 2 routes: <code>/signIn</code> and <code>/callback</code>. I will not go into detail about how these work; they are part of the OpenID specification.</p>
+<p>For sign-in, the proxy will define 2 routes: <code>/${sign_in_path}</code> or <code>/signIn</code> and <code>/${callback_path}</code> or <code>/callback</code>. I will not go into detail about how these work; they are part of the OpenID specification.</p>
 <ul>
 <li>
 <p><code>/signIn</code>
@@ -804,16 +983,16 @@ For now, code simplicity and centralization of authentication and security.</p>
 </li>
 <li>
 <p><code>/callback</code>
-  This route will redirect the user to a <code>PostSignInRedirectURL</code> (most likely a frontend URL) and initialize the user session.</p>
+  This route will redirect the user to a <code>post_sign_in_redirect_url</code> (most likely a frontend URL) and initialize the user session.</p>
 </li>
 </ul>
-<p>After that, if <code>NotifyUserSession</code> is <strong>true</strong>, it will call <code>NotifyUserSessionURL</code> with the user data in the headers.</p>
+<p>After that, if <code>notify_user_session</code> is <strong>true</strong>, it will call <code>notify_user_session_url</code> with the user data in the headers.</p>
 <h4 id="sign-out">Sign Out</h4>
 <ul>
 <li><code>/signOut</code></li>
 </ul>
-<p>If <code>IdPSignOut</code> is <strong>true</strong>, this route will end the user session and then redirect to the <strong>IdP Sign Out page</strong> (which will redirect back to <code>PostSignOutRedirectURL</code>).</p>
-<p>If <code>IdPSignOut</code> is <strong>false</strong>, this route will end the user session and then redirect to the <code>PostSignOutRedirectURL</code>.</p>
+<p>If <code>idp_sign_out</code> is <strong>true</strong>, this route will end the user session and then redirect to the <strong>IdP Sign Out page</strong> (which will redirect back to <code>post_sign_out_redirect_url</code>).</p>
+<p>If <code>idp_sign_out</code> is <strong>false</strong>, this route will end the user session and then redirect to the <code>post_sign_out_redirect_url</code>.</p>
 <h4 id="any-other-request">Any other request</h4>
 <p>For any request except the ones provided above, the proxy will read the session data (if the user is authenticated) and attach ID token claims to the request headers like so:</p>
 <pre><code class="language-json">// Headers:
@@ -825,7 +1004,7 @@ For now, code simplicity and centralization of authentication and security.</p>
 <p>or</p>
 <pre><code class="language-json">&quot;X-User-auth&quot;: false
 </code></pre>
-<p>It will also attach the access token if <code>AttachAccessToken</code> is <strong>true</strong> and refresh it if expired (with the refresh token).</p>
+<p>It will also attach the access token if <code>attach_access_token</code> is <strong>true</strong> and refresh it if expired (with the refresh token).</p>
 <pre><code class="language-json">&quot;Bearer Token&quot;: &quot;3m3vjk2b...&quot;
 </code></pre>
 <h3 id="proxy-design">Proxy design</h3>
@@ -837,14 +1016,40 @@ For now, code simplicity and centralization of authentication and security.</p>
 </blockquote>
 <h3 id="compatibility-with-traefik">Compatibility with Traefik</h3>
 <p><strong>Traefik</strong> supports the <code>forwardAuth</code> middleware, which offloads authentication to another server. Traefik makes a request to the authenticator server that contains the original request it received from the user.</p>
+<p align="center">
+  <img src="../../img/authforward.webp" alt="Diagram" width="100%">
+</p>
+
 <p>The auth server then makes a decision:</p>
 <ul>
 <li><code>2xx</code> - the request is OK and Traefik will forward it to the protected service (with added headers)</li>
 <li>otherwise, the request is rejected or redirected; the response will be the one provided by the auth server (the request does not reach the protected service)</li>
 </ul>
-<p align="center">
-  <img src="../../img/authforward.webp" alt="Diagram" width="100%">
-</p>
+<h2 id="trade-offs">Trade-offs</h2>
+<h3 id="benefits">Benefits</h3>
+<ul>
+<li>Code simplicity: all authorization is handled by the proxy (no need for auth logic on the backend or frontend).</li>
+<li>Authentication changes are centralized and automatically apply to all applications.</li>
+<li>Consistent security across all services.</li>
+<li>Clear separation of concerns.</li>
+<li>Additional features can be added later, such as IP blocklists or rate limiting.</li>
+</ul>
+<h3 id="drawbacks">Drawbacks</h3>
+<ul>
+<li>Introduces a single point of failure.</li>
+<li>Reduced flexibility for per-application authentication requirements.</li>
+<li>More difficult debugging and local development.</li>
+</ul>
+<h3 id="mitigations">Mitigations</h3>
+<h4 id="hybrid-mode">Hybrid mode</h4>
+<p><strong>Hybrid mode</strong> is a proposal to make the transition easier for backend services.
+In this mode, the proxy still performs the authorization steps, but instead of sending user data through request headers, it sends the ID token in the <code>Bearer</code> authorization header—similar to how <code>react-oidc-context</code> operates.
+This means backend services would not need to change their existing authentication logic.</p>
+<h4 id="nodejs-library">Node.js library</h4>
+<p>A significant drawback of the proxy is the difficulty of simulating the environment during local development.
+My proposed mitigation is a Node.js library that simulates the proxy in development and integrates with the proxy in production.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>This is a large project, and this document cannot cover the entire workflow, but I hope it conveys the overall concept, intended use cases, advantages, and disadvantages.</p>
 
 
 

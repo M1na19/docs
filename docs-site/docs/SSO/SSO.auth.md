@@ -145,34 +145,48 @@ The [Implicit Flow](https://auth0.com/docs/authenticate/login/oidc-conformant-au
 
 The [Authorization Code Flow](https://auth0.com/docs/authenticate/login/oidc-conformant-authentication/oidc-adoption-auth-code-flow) improves security by returning only an *authorization code* to the client. The client must then exchange it for tokens.
 
-
 <p align="center">
   <img src="../../img//code.png" alt="Diagram" width="400">
 </p>
 
 #### Steps
 
-1. User initiates sign in, makes a request to the client - ex: `https://example.ro/signIn`
-2. Client redirects user to the Identity Provider (IdP) - ex: `https://sso.ro/signIn`
-3. User logs in with credentials.
-4. The IdP redirects user back to Client with an **authorization code** - ex: `https://example.ro?authCode=...&iss=...`
-5. The Client can then exchange the code for tokens (`access token`, `id token`, sometimes `refresh token`). The IdP provides a route for this purpose - ex: `https://sso.ro/tokens`.
+1\. User initiates sign-in and makes a request to the client — e.g. `https://example.ro/signIn`
+
+   * The client generates a **state** value (random string) to protect against CSRF attacks.
+   * The client generates a **nonce** value to bind the issued ID token to the request and prevent replay attacks.
+
+2\. Client redirects the user to the Identity Provider (IdP) — e.g. `https://sso.ro/signIn?state=STATE&nonce=NONCE`
+
+3\. User logs in with credentials.
+
+4\. The IdP redirects the user back to the client with an **authorization code** — e.g.
+   `https://example.ro?authCode=...&iss=...&state=STATE`
+
+   * The client must verify that the returned `state` value matches the one it generated.
+
+5\. The client then exchanges the code for tokens (`access token`, `id token`, sometimes `refresh token`).
+   The IdP provides a route for this purpose — e.g. `https://sso.ro/tokens`.
+
 ```json
 body: {
   "code": AUTH_CODE, // from IdP callback
   ...
 }
 ```
-> Note: Depending on the type of application these tokens can be used directly or the Client can issue new tokens or sessions
+
+> Note: Depending on the type of application, these tokens can be used directly or the client can issue new tokens or sessions.
 
 #### Problems
 
 * Without PKCE, the code can be intercepted and misused.
 * Storing tokens directly in a SPA still carries the same exposure risks as the implicit flow.
 
+---
+
 ### [Authorization Code Flow with PKCE](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce)
 
-The [Authorization Code Flow with PKCE](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce) adds protection against code interception. PKCE (Proof Key for Code Exchange) is an algorithm that ensures continuity between the initial redirect and the code-exchange step by leveraging a random string and it's hash.
+The [Authorization Code Flow with PKCE](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce) adds protection against code interception. PKCE (Proof Key for Code Exchange) is an algorithm that ensures continuity between the initial redirect and the code-exchange step by leveraging a random string and its hash.
 
 <p align="center">
   <img src="../../img//code.png" alt="Diagram" width="400">
@@ -180,30 +194,38 @@ The [Authorization Code Flow with PKCE](https://auth0.com/docs/get-started/authe
 
 #### Steps
 
-1\. User initiates sign in, makes a request to the client - ex: `https://example.ro/signIn`
+1\. User initiates sign-in — e.g. `https://example.ro/signIn`
 
-- The client generates a cryptographically random **code verifier** - random string.
-- The client derives a **code challenge** from the verifier (typically a SHA-256 hash). 
-- The client sends the **code challenge** along with the authorization request.
+* The client generates a cryptographically random **code verifier** (random string).
+* The client derives a **code challenge** from the verifier (typically a SHA-256 hash).
+* The client generates a **state** value for CSRF protection.
+* The client generates a **nonce** value for ID token replay protection.
+* The client sends the **code challenge**, **state**, and **nonce** along with the authorization request.
 
-2\. Client redirects user to the Identity Provider (IdP) with code challange - ex: `https://sso.ro/signIn?code_challange=....`
+2\. Client redirects the user to the Identity Provider (IdP) with the code challenge — e.g.
+`https://sso.ro/signIn?code_challenge=...&state=STATE&nonce=NONCE`
 
-3\. After successful authentication, the IdP redirects the user back with the **authorization code** - ex: `https://example.ro?authCode=...&iss=...`
+3\. After successful authentication, the IdP redirects the user back with the **authorization code** — e.g.
+`https://example.ro?authCode=...&iss=...&state=STATE`
 
-4\. The client exchanges the authorization code **together with the original code verifier** for access and identity tokens - ex: `https://https://sso.ro/token`
+* The client must verify the `state` value before exchanging the code.
+
+4\. The client exchanges the authorization code **together with the original code verifier** for access and identity tokens — e.g. `https://sso.ro/token`
 
 ```json
-body:{
-  "code": AUTH_CODE,// auth code from callback
+body: {
+  "code": AUTH_CODE, // auth code from callback
   "code_verifier": CODE_VERIFIER,
   "client_id": CLIENT_ID
-  ... // there is other data included such as client secret, redirect uri etc.
+  ... // other data included such as client secret, redirect URI, etc.
 }
 ```
 
 5\. The IdP checks that the code verifier corresponds to the previously sent code challenge, and if valid, issues tokens.
 
-> **Note:** The IdP does *not* send the code challenge back to the client. The client must remember the verifier locally.
+* The client checks the `nonce` inside the ID token to ensure it matches the originally generated nonce.
+
+> **Note:** The IdP does *not* send the code challenge back to the client. The client must remember the verifier (as well as the state and nonce) locally.
 
 ## Cross-Site Scripting (XSS)
 
